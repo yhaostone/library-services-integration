@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="BookInformationServiceSOAP" startOnLoad="true"
+  trace="disable" transports="https http" xmlns="http://ws.apache.org/ns/synapse">
+  <target>
+    <inSequence>
+      <!-- <log description="Log SOAP request" level="full"/>
+      <property expression="//ns:retrieveBookDetails/isbn" name="isbn"
+        scope="default" type="STRING" xmlns:ns="http://bookProxy.waa.swin.edu.au"/>
+      <property
+        expression="fn:concat('q=isbn:',get-property('isbn'),'&amp;key=AIzaSyDrqhv_ZHtKvTe26pqm47bcqmiFdBs8oo8')"
+        name="uri.var.queryString" scope="default" type="STRING"/>
+      <property description="Transform message format to JSON"
+        name="messageType" scope="axis2" type="STRING" value="application/json"/>
+      <send/> -->
+      
+      <log level="full" description="Log SOAP request"/>
+            <property xmlns:ns="http://bookProxy.waa.swin.edu.au"
+		name="uri.var.isbn"
+		expression="//ns:retrieveBookDetails/isbn"
+		scope="default"
+		type="STRING"/>
+	    <property name="messageType"
+		value="application/json"
+		scope="axis2"
+		type="STRING"
+		description="Transform message format to JSON"/>
+            <send>
+                <endpoint name="GoogleBookEP">
+                    <http method="get" uri-template="https://www.googleapis.com/books/v1/volumes?q=isbn:{uri.var.isbn}&amp;key=AIzaSyCY4ZauGcihl4eW2Tyd23fh_gcgwrmNdfw"/>
+                </endpoint>
+            </send>
+    </inSequence>
+    <outSequence>
+      <log description="Log returned JSON payload">
+        <property expression="json-eval($.)" name="JSON-Payload"/>
+      </log>
+      <script language="js"><![CDATA[var jsonObject=mc.getPayloadJSON();
+				var totalItems=jsonObject.totalItems;
+
+				//if total items are 0 then isbn invalid 
+				if(totalItems==0)
+				{  mc.setPayloadXML(<ns:retrieveBookDetailsResponse xmlns:ns="http://bookProxy.waa.swin.edu.au">
+								<isbnValidity>invalid</isbnValidity>    
+								<bookTitle/>
+								<authorList/>
+								<isbn10/>
+								<isbn13/>
+								<publisher/>
+								<publishDate/>
+								<averageRating/>
+								<australianAvailability/>
+						</ns:retrieveBookDetailsResponse>);
+				}
+				else{ 
+					var bookTitle=jsonObject.items[0].volumeInfo.title;
+					var authorJSONArray=jsonObject.items[0].volumeInfo.authors;
+					var authorList=authorJSONArray[0];
+					var isbn10=jsonObject.items[0].volumeInfo.industryIdentifiers[1].identifier;
+					var isbn13=jsonObject.items[0].volumeInfo.industryIdentifiers[0].identifier;
+					var publisher=jsonObject.items[0].volumeInfo.publisher;
+					var publishDate=jsonObject.items[0].volumeInfo.publishedDate;
+					var averageRating=jsonObject.items[0].volumeInfo.averageRating;
+
+					//if averageRating is null meaning it is not defined in JSON response then set it to 0
+					if(averageRating==null)
+					{
+						averageRating="0";
+					} 
+					
+					var saleability=jsonObject.items[0].saleInfo.saleability;
+
+					//If  valid then form author list (comma separated values) from authorJSONArray (if more authors) 
+					for(var i=1;i<authorJSONArray.length;i++)
+					{
+						authorList+=", "+authorJSONArray[i];
+					}
+					
+					//send response containing book details
+					mc.setPayloadXML(<ns:retrieveBookDetailsResponse xmlns:ns="http://bookProxy.waa.swin.edu.au">
+								<isbnValidity>valid</isbnValidity>    
+								<bookTitle>{bookTitle}</bookTitle>
+								<authorList>{authorList}</authorList>
+								<isbn10>{isbn10}</isbn10>
+								<isbn13>{isbn13}</isbn13>
+								<publisher>{publisher}</publisher>
+								<publishDate>{publishDate}</publishDate>
+								<averageRating>{averageRating}</averageRating>
+								<australianAvailability>{saleability}</australianAvailability>
+						</ns:retrieveBookDetailsResponse>);
+					}]]></script>
+      <property description="Transform message format to SOAP"
+        name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+      <send/>
+    </outSequence>
+    <faultSequence/>
+  </target>
+</proxy>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:tns="http://process.waa.swin.edu.auArtifacts" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://process.swin.edu.au" xmlns:wsdl1="http://student.waa.swin.edu.au" xmlns:wsdl2="http://waa.swin.edu.au" xmlns:wsdl3="http://waa.swin.edu.au/" xmlns:wsdl4="http://ws.apache.org/axis2" xmlns:wsdl5="http://bookProxy.waa.swin.edu.au" name="BookOrderingArtifacts" targetNamespace="http://process.waa.swin.edu.auArtifacts">
+  <plnk:partnerLinkType name="ClientPTL">
+    <plnk:role name="bookOrderingOperation" portType="wsdl:BookOrderingPort"/>
+  </plnk:partnerLinkType>
+  <plnk:partnerLinkType name="StudentServicePTL">
+    <plnk:role name="studentServiceProvider" portType="wsdl1:StudentServiceSOAPPortType"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="BookInformationServiceSOAPPLT">
+    <plnk:role name="BookInformationServiceProvider" portType="wsdl5:BookInformationSOAP"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="BoonInventoryPLT">
+    <plnk:role name="BookInventoryProvider" portType="wsdl2:BookInventoryServiceSOAPPortType"/>
+  </plnk:partnerLinkType>
+    <import location="bookOrdering.wsdl" namespace="http://process.swin.edu.au"/>
+    <import location="StudentServiceSOAP.wsdl" namespace="http://student.waa.swin.edu.au"/>
+    <import location="BookInformationServiceSOAP.wsdl" namespace="http://bookProxy.waa.swin.edu.au"/>
+    <import location="BookInventorySOAP.wsdl" namespace="http://waa.swin.edu.au"/>
+</definitions>

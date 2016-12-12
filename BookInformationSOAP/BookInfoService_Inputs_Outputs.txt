@@ -1,0 +1,114 @@
+*for these inputs to work in WSO2 esb server console, use ns:prefix in start and end tags.
+The isbn inputs work fine whsn invoked using WSDL.
+
+Not available in australia:
+Input:
+<retrieveBookDetails xmlns="http://bookProxy.bookProxy.waa.swin.edu.au">
+<isbn>9780969074526</isbn> 
+</retrieveBookDetails>
+
+Output:
+<retrieveBookDetailsResponse xmlns="http://bookProxy.waa.swin.edu.au">
+   <isbnValidity>valid</isbnValidity>
+   <bookTitle>ISBN 0-9690745-2-2</bookTitle>
+   <authorList>Brad Brace</authorList>
+   <isbn10>0969074522</isbn10>
+   <isbn13>9780969074526</isbn13>
+   <publisher>brad brace</publisher>
+   <publishDate>1984</publishDate>
+   <averageRating>5</averageRating>
+   <australianAvailability>NOT_FOR_SALE</australianAvailability>
+</retrieveBookDetailsResponse>
+
+
+
+rating less than 3 and available in australia
+Input:
+<retrieveBookDetails xmlns="http://bookProxy.waa.swin.edu.au">
+<isbn>1442417277</isbn> 
+</retrieveBookDetails>
+
+Output:
+<retrieveBookDetailsResponse xmlns="http://bookProxy.waa.swin.edu.au">
+   <isbnValidity>valid</isbnValidity>
+   <bookTitle>Famous</bookTitle>
+   <authorList>Todd Strasser</authorList>
+   <isbn10>1442417277</isbn10>
+   <isbn13>9781442417274</isbn13>
+   <publisher>Simon and Schuster</publisher>
+   <publishDate>2011-01-25</publishDate>
+   <averageRating>2.5</averageRating>
+   <australianAvailability>FOR_SALE</australianAvailability>
+</retrieveBookDetailsResponse>
+
+
+rating 3 and available in australia
+Input:
+
+<retrieveBookDetails xmlns="http://bookProxy.waa.swin.edu.au">
+<isbn>0735637415</isbn> 
+</retrieveBookDetails>
+
+Output:
+<retrieveBookDetailsResponse xmlns="http://bookProxy.waa.swin.edu.au">
+   <isbnValidity>valid</isbnValidity>
+   <bookTitle>Test-Driven Development in Microsoft .NET</bookTitle>
+   <authorList>Alexei Vorontsov, James W. Newkirk</authorList>
+   <isbn10>0735637415</isbn10>
+   <isbn13>9780735637412</isbn13>
+   <publisher>Microsoft Press</publisher>
+   <publishDate>2004-03-17</publishDate>
+   <averageRating>3</averageRating>
+   <australianAvailability>FOR_SALE</australianAvailability>
+</retrieveBookDetailsResponse>
+
+
+
+
+No rating: *output gives rating as "0", for sale
+Input:
+<retrieveBookDetails xmlns="http://bookProxy.waa.swin.edu.au">
+<isbn>1467225843</isbn> 
+</retrieveBookDetails>
+
+Output:
+<retrieveBookDetailsResponse xmlns="http://bookProxy.waa.swin.edu.au">
+   <isbnValidity>valid</isbnValidity>
+   <bookTitle>e-Study Guide for: Abnormal Psychology by Robin Rosenberg, ISBN 9781429263566</bookTitle>
+   <authorList>Cram101 Textbook Reviews</authorList>
+   <isbn10>1467225843</isbn10>
+   <isbn13>9781467225847</isbn13>
+   <publisher>Cram101 Textbook Reviews</publisher>
+   <publishDate>2014-01-01</publishDate>
+   <averageRating>0</averageRating>
+   <australianAvailability>FOR_SALE</australianAvailability>
+</retrieveBookDetailsResponse>
+
+Rating 3.5 and sale in aus
+1460701895
+<retrieveBookDetails xmlns="http://bookProxy.waa.swin.edu.au">
+<isbn>1460701895</isbn> 
+</retrieveBookDetails>
+
+Ricky Ponting book
+
+No isbn: *output vaidity is "invalid"
+Input:
+<retrieveBookDetails xmlns="http://bookProxy.waa.swin.edu.au">
+<isbn>07356</isbn> 
+</retrieveBookDetails>
+
+Output:
+<retrieveBookDetailsResponse xmlns="http://bookProxy.waa.swin.edu.au">
+   <isbnValidity>invalid</isbnValidity>
+   <bookTitle/>
+   <authorList/>
+   <isbn10/>
+   <isbn13/>
+   <publisher/>
+   <publishDate/>
+   <averageRating/>
+   <australianAvailability/>
+</retrieveBookDetailsResponse>
+
+

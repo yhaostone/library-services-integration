@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:bookProxy.waa.swin.edu.au="http://bookProxy.waa.swin.edu.au" xmlns:process.swin.edu.au="http://process.swin.edu.au" xmlns:process.waa.swin.edu.au="http://process.waa.swin.edu.au" xmlns:student.waa.swin.edu.au="http://student.waa.swin.edu.au" xmlns:waa.swin.edu.au="http://waa.swin.edu.au">
+  <process name="process.waa.swin.edu.au:BookOrdering">
+    <active>true</active>
+    <retired>false</retired>
+    <process-events generate="all"/>
+    <provide partnerLink="clientPartnerLink">
+      <service name="process.swin.edu.au:bookOrdering" port="bookOrderingSOAP"/>
+    </provide>
+    <invoke partnerLink="StudentServicePartnerLink">
+      <service name="student.waa.swin.edu.au:StudentServiceSOAP" port="StudentServiceSOAPHttpSoap11Endpoint"/>
+    </invoke>
+    <invoke partnerLink="BookInformationServiceSOAPPartnerLink">
+      <service name="bookProxy.waa.swin.edu.au:BookInformationSOAP" port="BookInformationServiceSOAP"/>
+    </invoke>
+    <invoke partnerLink="BookInventoryPartnerLink">
+      <service name="waa.swin.edu.au:BookInventoryServiceSOAP" port="BookInventoryServiceSOAPHttpSoap11Endpoint"/>
+    </invoke>
+  </process>
+</deploy>

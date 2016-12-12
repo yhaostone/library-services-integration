@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bookProxy.waa.swin.edu.au" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="BookInformationSOAP" targetNamespace="http://bookProxy.waa.swin.edu.au">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://bookProxy.waa.swin.edu.au">
+      <xsd:element name="retrieveBookDetails">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="isbn" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="retrieveBookDetailsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+          	<xsd:element name="isbnValidity" type="xsd:string" />
+          	<xsd:element name="bookTitle" type="xsd:string"></xsd:element>
+          	<xsd:element name="authorList" type="xsd:string"></xsd:element>
+          	<xsd:element name="isbn10" type="xsd:string"></xsd:element>
+          	<xsd:element name="isbn13" type="xsd:string"></xsd:element>
+          	<xsd:element name="publisher" type="xsd:string"></xsd:element>
+          	<xsd:element name="publishDate" type="xsd:string"></xsd:element>
+          	<xsd:element name="averageRating" type="xsd:string"></xsd:element>
+          	<xsd:element name="australianAvailability" type="xsd:string"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="retrieveBookDetailsRequest">
+    <wsdl:part element="tns:retrieveBookDetails" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="retrieveBookDetailsResponse">
+    <wsdl:part element="tns:retrieveBookDetailsResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="BookInformationSOAP">
+    <wsdl:operation name="retrieveBookDetails">
+      <wsdl:input message="tns:retrieveBookDetailsRequest"/>
+      <wsdl:output message="tns:retrieveBookDetailsResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BookInformationSOAP" type="tns:BookInformationSOAP">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="retrieveBookDetails">
+      <soap:operation soapAction="http://bookProxy.waa.swin.edu.au/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BookInformationSOAP">
+    <wsdl:port binding="tns:BookInformationSOAP" name="BookInformationServiceSOAP">
+      <soap:address location="http://localhost:8281/services/BookInformationServiceSOAP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
